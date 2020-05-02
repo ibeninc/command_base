@@ -20,10 +20,10 @@ api = Api(app)
 jwt = JWTManager(app)
 
 
-#this tells flask to create all tables defined in all models in the app
-@app.before_first_request
-def create_tables():
-    db.create_all()
+#this tells flask to create all tables defined in all models in the app when using local db
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
 
 
 #defining jwt claims
