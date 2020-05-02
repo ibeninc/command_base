@@ -9,7 +9,7 @@ from resources.collection import Collection, CollectionList
 from blacklist import BLACKLIST
 #commandenv
 app= Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = ('sqlite:///data.db') # this allows us to postgress from heroku on live server and sqlite on local
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db') # this allows us to postgress from heroku on live server and sqlite on local
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # allows us to see error raised by JWT in our app
 app.config['JWT_BLACKLIST_ENABLED'] = True # this enables us to deny access for specific user ids

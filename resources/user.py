@@ -8,7 +8,8 @@ from flask_jwt_extended import (
     jwt_refresh_token_required, 
     get_jwt_identity,
     jwt_required,
-    get_raw_jwt
+    get_raw_jwt,
+    get_jwt_claims
     )
 from blacklist import BLACKLIST
 
@@ -37,15 +38,25 @@ class UserRegister(Resource):
         return {'message': 'User created successfully', 'data':[user.json()] }, 201
 
 class User(Resource):
+    @jwt_required
     @classmethod
     def get(cls, user_id):
+        claims = get_jwt_claims() # this allows us to access jwt claims defined in app.py
+        if not claims['is_admin']: # checks if the claim value = is_admin as defines in app.py
+            return {'message': 'Admin privilages needed'}
+            
         user = UserModel.find_by_id(user_id)
         if not user:
             return {'message': 'user not found'}, 404
         return user.json()
-
+    
+    @jwt_required
     @classmethod
     def delete(cls, user_id):
+        claims = get_jwt_claims() # this allows us to access jwt claims defined in app.py
+        if not claims['is_admin']: # checks if the claim value = is_admin as defines in app.py
+            return {'message': 'Admin privilages needed'}
+
         user = UserModel.find_by_id(user_id)
         if not user:
             return {'message': 'user not found'}, 404
